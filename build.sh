@@ -1,5 +1,10 @@
+#!/bin/bash
+set -euxo pipefail
+
 CGO_ENABLED=0 GOOS=linux go build -a -installsuffix cgo -o app .
 
-docker build -t tracing-example .
+sudo docker build -t clux/otel-tracing-go .
+sudo docker tag clux/otel-tracing-go:latest clux/otel-tracing-go:0.1.0
+sudo docker push clux/otel-tracing-go:0.1.0
 
 rm app

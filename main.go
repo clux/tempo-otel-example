@@ -27,7 +27,7 @@ import (
 )
 
 // global vars...gasp!
-var addr = "127.0.0.1:8000"
+var addr = "0.0.0.0:8000"
 var tracer trace.Tracer
 var httpClient http.Client
 var logger log.Logger
@@ -40,6 +40,7 @@ var metricRequestLatency = promauto.NewHistogram(prometheus.HistogramOpts{
 })
 
 func main() {
+	fmt.Println("booting...")
 	flush := initTracer()
 	defer flush()
 
@@ -106,7 +107,7 @@ func initTracer() func() {
 
 	driver := otlpgrpc.NewDriver(
 		otlpgrpc.WithInsecure(),
-		otlpgrpc.WithEndpoint("tempo:55680"),
+		otlpgrpc.WithEndpoint(os.Getenv("OPENTELEMETRY_ENDPOINT_URL")), // in-cluster
 		otlpgrpc.WithDialOption(grpc.WithBlock()), // useful for testing
 	)
 	exp, err := otlp.NewExporter(ctx, driver)
@@ -169,7 +170,7 @@ func instrumentedServer(handler http.HandlerFunc) *http.Server {
 
 	return &http.Server{
 		Handler: r,
-		Addr:    "0.0.0.0:8000",
+		Addr:    ":8000",
 	}
 }
 

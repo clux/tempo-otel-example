@@ -7,4 +7,5 @@ USER app
 
 COPY ./app .
 
-CMD ["./app"] 
+EXPOSE 8000
+CMD ["./app"]
