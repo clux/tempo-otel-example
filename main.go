@@ -36,7 +36,8 @@ var metricRequestLatency = promauto.NewHistogram(prometheus.HistogramOpts{
 	Namespace: "demo",
 	Name:      "request_latency_seconds",
 	Help:      "Request Latency",
-	Buckets:   prometheus.ExponentialBuckets(.0001, 2, 50),
+	//Buckets: prometheus.LinearBuckets(-3, .1, 61),
+	Buckets:   prometheus.ExponentialBuckets(.0001, 2, 10),
 })
 
 func main() {
